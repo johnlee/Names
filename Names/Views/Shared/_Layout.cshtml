@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"]</title>
+  <base href="/" />
+  <environment names="Development">
+    <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/dist/style.css" asp-append-version="true" />
+    <script type="text/javascript" src="~/dist/vendor.js" asp-file-version="true"></script>
+  </environment>
+  <environment names="Staging,Production">
+    <link rel="stylesheet" href="~/dist/vendor.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/dist/style.min.css" asp-append-version="true" />
+    <script type="text/javascript" src="~/dist/vendor.js" asp-file-version="true"></script>
+  </environment>
+</head>
+<body>
+  @RenderBody()
+</body>
+</html>

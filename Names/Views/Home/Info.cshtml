@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "User Information";
+}
+
+<h1>User Info</h1>
+
+@if (User != null && User.Identity != null)
+{
+    <table style="border: 1px solid gray; border-collapse: separate; border-spacing: 10px;">
+      <tr>
+        <th width="300px">Name</th>
+        <td>@User.Identity.Name</td>
+      </tr>
+      <tr>
+        <th>Authenticated</th>
+        <td>@User.Identity.IsAuthenticated</td>
+      </tr>
+      <tr>
+        <th>Claims</th>
+        <td>
+          @foreach (var claim in User.Claims)
+          {
+              <span>@claim.Type | @claim.Value</span><br />
+          }
+        </td>
+      </tr>
+    </table>
+}
+
+<hr />
+
+<h1>Headers</h1>
+
+@if (Context.Request.Headers.Count > 0)
+{
+    <table style="border: 1px solid gray; border-collapse: separate; border-spacing: 10px;">
+      @foreach (var header in Context.Request.Headers)
+      {
+          <tr>
+            <th width="300px">@header.Key</th>
+            <td>@header.Value</td>
+          </tr>
+      }
+    </table>
+}
+
+<hr />
+
+<span class="text-info">end of page</span>

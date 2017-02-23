@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Names Manager";
+}
+
+@if (User != null && User.Identity != null)
+{
+    <h1>User = @User.Identity.Name</h1>
+}
+else
+{
+    <h1>User Unknown!</h1>
+}
+
+
+<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>
+<script src="~/dist/vendor.js" asp-append-version="true"></script>
+<script src="~/dist/main-client.js" asp-append-version="true"></script>
