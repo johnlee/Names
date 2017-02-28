@@ -23,11 +23,7 @@ namespace Names.Controllers
             var names = Repository.GetAllNamesByUser(this.User.Identity.Name);
             var total = names.ToList().Count;
 
-            return new
-            {
-                TotalRecords = total,
-                Names = names.Select(x => Factory.Create(x))
-            };
+            return names.Select(x => Factory.Create(x));
         }
 
         // GET api/Names/5

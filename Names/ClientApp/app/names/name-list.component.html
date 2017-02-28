@@ -1,0 +1,97 @@
+<article class="template animated slideInRight">
+  <h2>List of Names</h2>
+  <div id="addButton" *ngIf="!showAddForm">
+    <button class="btn btn-primary" (click)="toggleAddForm()">
+      Add
+    </button>
+  </div>
+
+  <div id="searchFilter">
+
+  </div>
+
+  <div class="card" *ngIf="showAddForm">
+    <div class="card-block">
+      <div class="form-group">
+        <button class="btn btn-secondary pull-right" (click)="showAddForm = !showAddForm">
+          Cancel
+        </button>
+        <span class="pull-right">&nbsp;</span>
+        <button class="btn btn-primary pull-right" (click)="saveAddForm()">
+          Save
+        </button>
+      </div>
+      <div id="addFormQuick" *ngIf="showAddFormQuick">
+        <div class="form-group">
+          <label for="addQuick">Quick Add </label> <a [attr.href]="null" (click)='toggleAddQuick()'> Show Full Form</a>
+          <textarea id="addQuick" class="form-control" rows="3" [(ngModel)]="nameblock"></textarea>
+          <small class="text-warning">
+            Enter Name, Tags and Features on each line. Multiple tags and features separated by commas. Example:<br />
+            <i>John Lee</i><br />
+            <i>work, manager</i><br />
+            <i>skinny, asian, glasses</i><br />
+          </small>
+        </div>
+      </div>
+      <div id="addForm" *ngIf="!showAddFormQuick">
+        <div class="form-group">
+          <label for="addName">Name</label> <a [attr.href]="null" (click)='toggleAddQuick()'> Show Quick Form</a>
+          <input id="addName" type="text" class="form-control" [(ngModel)]="name.name" required />
+        </div>
+        <div class="form-group">
+          <label for="addTags">Tags</label>
+          <input id="addTags" type="text" class="form-control" [(ngModel)]="name.tags" />
+          <small class="text-warning">Add multiple tags separated by comma. Example: <i>work, manager</i></small>
+          <p>
+            <small class="text-info">Popular Tags:</small>
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="addFeatures">Features</label>
+          <input id="addFeatures" type="text" class="form-control" [(ngModel)]="name.features" />
+          <small class="text-warning">Add multiple features separated by comma. Example: <i>skinny, asian, glasses</i></small>
+          <p>
+            <small class="text-info">Popular Features:</small>
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="uploadPhoto">Upload Photo</label>
+          <input id="uploadPhoto" type="file" class="form-control-file" title="This Feature not Enabled" disabled>
+        </div>
+      </div>
+      <div id="error" *ngIf='error'>
+        <h4>Error</h4>
+        <p>
+          {{ error }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf='names && names.length'>
+    <div class="card-block" *ngFor="let name of names">
+      <img class="card-image thumbnail pull-left" src="/dist/main/images/lego03.png" alt="Person Photo">
+      <a href="" [routerLink]="['/Home', name.id]">
+        <button class="btn btn-default pull-right">
+          Edit
+        </button>
+      </a>
+      <h4 class="card-title">{{ name.name }}</h4>
+
+      <hr class="card-spacer" />
+
+      <p class="card-text">
+        <strong>Tags: </strong>
+        <span *ngFor="let tag of name.tags">{{ tag }}, </span>
+      </p>
+      <p class="card-text">
+        <strong>Features: </strong>
+        <span *ngFor="let feature of name.features">{{ feature }}, </span>
+      </p>
+      <div class="card-footer">
+        <small class="text-muted">Modified: 3 mins ago</small>
+        <small class="text-muted">Created:  3 mins ago</small>
+      </div>
+    </div>
+  </div>
+</article>
