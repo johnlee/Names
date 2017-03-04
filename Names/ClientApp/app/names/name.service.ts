@@ -1,17 +1,15 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do'; // used to load the javascript
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
 
 import { IName } from './name.model';
+import { SpinnerService } from '../core';
 
 @Injectable()
 export class NameService {
   private apiUrl = 'api/Names';
 
-  constructor(private http: Http) { } // Inject HTTP Service
+  constructor(private http: Http, private spinnerService: SpinnerService) { } 
 
   getName(id: number): Observable<IName> {
     return this.http
@@ -22,11 +20,13 @@ export class NameService {
   }
 
   getNames(): Observable<IName[]> {
+    this.spinnerService.show();
     return this.http
       .get(this.apiUrl)
       .map((res: Response) => <IName[]>res.json()) // .map is Observable
       .do(data => console.log('GetNames: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      .catch(this.handleError)
+      .finally(() => this.spinnerService.hide());
   }
   
   addName(name: IName): Observable<number> {
@@ -34,13 +34,12 @@ export class NameService {
     let options = new RequestOptions({ headers: headers });
     let body = JSON.stringify(name);
 
-    //this.spinnerService.show();
+    this.spinnerService.show();
     return this.http.post(this.apiUrl, body, options)
       .map((res: Response) => <number>res.json()) // .map is Observable
       .do(data => console.log('AddName: ' + JSON.stringify(data)))
-      .catch(this.handleError);
-    //.catch(this.exceptionService.catchBadResponse)
-    //.finally(() => this.spinnerService.hide());
+      .catch(this.handleError)
+      .finally(() => this.spinnerService.hide());
   }
 
   updateName(name: IName): Observable<number> {
@@ -48,23 +47,21 @@ export class NameService {
     let options = new RequestOptions({ headers: headers });
     let body = JSON.stringify(name);
 
-    //this.spinnerService.show();
-
+    this.spinnerService.show();
     return this.http.put(this.apiUrl + "/" + name.id, body, options)
       .map((res: Response) => <number>res.json()) // .map is Observable
       .do(data => console.log('UpdateName: ' + JSON.stringify(data)))
-      .catch(this.handleError);
-    //.catch(this.exceptionService.catchBadResponse);
-    //.finally(() => this.spinnerService.hide());
+      .catch(this.handleError)
+      .finally(() => this.spinnerService.hide());
   }
 
   deleteName(id: number): Observable<boolean> {
-    //this.spinnerService.show();
+    this.spinnerService.show();
     return this.http.delete(this.apiUrl + "/" + id)
       .map((res: Response) => <boolean>res.json()) // .map is Observable
       .do(data => console.log('DeleteName: ' + JSON.stringify(data)))
-      .catch(this.handleError);
-      //.finally(() => this.spinnerService.hide());
+      .catch(this.handleError)
+      .finally(() => this.spinnerService.hide());
   }
 
   private handleError(error: Response | any) {

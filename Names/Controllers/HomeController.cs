@@ -134,5 +134,14 @@ namespace Names.Controllers
             await _signInManager.SignInAsync(iuser, false);
             return RedirectToAction("Dashboard", "Home");
         }
+
+        [Authorize]
+        public object Identity()
+        {
+            return new
+            {
+                name = this.User.Identity.Name
+            };
+        }
     }
 }

@@ -21,8 +21,6 @@ namespace Names.Controllers
         public object Get()
         {
             var names = Repository.GetAllNamesByUser(this.User.Identity.Name);
-            var total = names.ToList().Count;
-
             return names.Select(x => Factory.Create(x));
         }
 

@@ -15,6 +15,7 @@ export class NameDetailComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   name: IName;
   error: string;
+  showModal: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +29,7 @@ export class NameDetailComponent implements OnInit, OnDestroy {
         let id = +params['id'];
         this.getName(id);
       });
+    this.showModal = false;
   }
 
   ngOnDestroy() {
@@ -62,6 +64,10 @@ export class NameDetailComponent implements OnInit, OnDestroy {
         this.error = <any>error;
       });
   } 
+
+  toggleModal(): void {
+    this.showModal = !this.showModal;
+  }
 
   deleteName(): void {
     this.nameService.deleteName(this.name.id)

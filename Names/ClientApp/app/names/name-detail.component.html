@@ -34,7 +34,7 @@
         </button>
       </a>
       <span class="pull-right">&nbsp;</span>
-      <button class="btn btn-danger" (click)="deleteName()">
+      <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" (click)="toggleModal()">
         Delete
       </button>
       <button class="btn btn-primary" (click)="updateName()">
@@ -51,4 +51,28 @@
       {{ error }}
     </p>
   </div>
+</div>
+
+<div *ngIf="showModal">
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this name {{ name.name }}?</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btnConfirm" type="button" class="btn btn-danger" (click)="deleteName()" data-dismiss="modal">Delete</button>
+          <button id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>

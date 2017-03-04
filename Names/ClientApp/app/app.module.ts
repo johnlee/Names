@@ -2,15 +2,16 @@ import { NgModule } from '@angular/core';
 import { UniversalModule } from 'angular2-universal';
 import { Routes, RouterModule } from '@angular/router';
 
+import { CoreModule } from './core/core.module';
 import { NameModule } from './names/name.module';
 import { AboutComponent } from './about/about.component';
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './navmenu/navmenu.component';
 
 @NgModule({
   imports: [
     UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
     NameModule,
+    CoreModule,
     RouterModule.forRoot([
       {
         path: 'Home',
@@ -34,7 +35,6 @@ import { NavMenuComponent } from './navmenu/navmenu.component';
   ],
   declarations: [
     AppComponent,
-    NavMenuComponent,
     AboutComponent
   ],
   bootstrap: [AppComponent]
