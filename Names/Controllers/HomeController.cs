@@ -26,10 +26,10 @@ namespace Names.Controllers
                 return RedirectToAction("Dashboard", "Home");
             }
             string registerUrl = "{0}://{1}/.auth/login/{2}?post_login_redirect_url=/Home/Login";
-            ViewBag.Microsoft = string.Format(registerUrl, Request.Scheme, Request.Host, "microsoft");
+            ViewBag.Microsoft = string.Format(registerUrl, Request.Scheme, Request.Host, "microsoftaccount");
             ViewBag.Google = string.Format(registerUrl, Request.Scheme, Request.Host, "google");
             ViewBag.Facebook = string.Format(registerUrl, Request.Scheme, Request.Host, "facebook");
-            ViewBag.Twitter = string.Format(registerUrl, Request.Scheme, Request.Host, "twitter");
+            //ViewBag.Twitter = string.Format(registerUrl, Request.Scheme, Request.Host, "twitter");
             return View();
         }
 
@@ -51,19 +51,22 @@ namespace Names.Controllers
             {
                 // Azure App Service Authentication (EasyAuth) doesnt support .NET Core yet. THis is workaround. 
                 // Inspired by posting here: http://stackoverflow.com/questions/41501612/trouble-getting-claimsprincipal-populated-when-using-easyauth-to-authenticate-ag
-                if (Request.Headers.ContainsKey("X-MS-CLIENT-PRINCIPAL-NAME")) // Passed Azure Authentication
-                {   
+                if (Request.Headers.ContainsKey("X-MS-CLIENT-PRINCIPAL-ID")) // Passed Azure Authentication
+                {
+                    var id = Request.Headers["X-MS-CLIENT-PRINCIPAL-ID"][0];
                     var username = Request.Headers["X-MS-CLIENT-PRINCIPAL-NAME"][0];
-                    IdentityUser iuser = await _userManager.FindByNameAsync(username);
+                    var provider = Request.Headers["X-MS-CLIENT-PRINCIPAL-IDP"][0];
+                    IdentityUser login = await _userManager.FindByNameAsync(id);
 
                     // Check if new user registered  
-                    if (iuser == null)
+                    if (login == null)
                     { 
                         // Register New User
-                        iuser = new IdentityUser(username);
-                        iuser.Email = username;
+                        login = new IdentityUser(id);
+                        var fullidentifier = username.Contains("@") ? username : username + "@" + provider;
+                        login.Email = fullidentifier.Replace(" ", string.Empty);
 
-                        var creation = await _userManager.CreateAsync(iuser, "NamesManager#2017"); // Dummy Pswd, never used
+                        var creation = await _userManager.CreateAsync(login, "NamesManager#2017"); // Dummy Pswd, never used
                         if (!creation.Succeeded)
                         {
                             throw new Exception("Unable to register new user. Please try back later.");
@@ -71,7 +74,7 @@ namespace Names.Controllers
                     }
 
                     // Signin and goto dashboard
-                    await _signInManager.SignInAsync(iuser, false);
+                    await _signInManager.SignInAsync(login, false);
                     return RedirectToAction("Dashboard", "Home");
                 }
             }
@@ -111,36 +114,48 @@ namespace Names.Controllers
         /// TODO
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Backdoor()
-        {
-            var username = "johnjlee316@gmail.com";
-            IdentityUser iuser = await _userManager.FindByNameAsync(username);
+        //public async Task<IActionResult> Backdoor()
+        //{
+        //    var username = "johnjlee316@gmail.com";
+        //    IdentityUser iuser = await _userManager.FindByNameAsync(username);
 
-            // Check if new user registered  
-            if (iuser == null)
-            {
-                // Register New User
-                iuser = new IdentityUser(username);
-                iuser.Email = username;
+        //    // Check if new user registered  
+        //    if (iuser == null)
+        //    {
+        //        // Register New User
+        //        iuser = new IdentityUser(username);
+        //        iuser.Email = username;
 
-                var creation = await _userManager.CreateAsync(iuser, "NamesManager#2017"); // Dummy Pswd, never used
-                if (!creation.Succeeded)
-                {
-                    throw new Exception("Unable to register new user. Please try back later.");
-                }
-            }
+        //        var creation = await _userManager.CreateAsync(iuser, "NamesManager#2017"); // Dummy Pswd, never used
+        //        if (!creation.Succeeded)
+        //        {
+        //            throw new Exception("Unable to register new user. Please try back later.");
+        //        }
+        //    }
 
-            // Signin and goto dashboard
-            await _signInManager.SignInAsync(iuser, false);
-            return RedirectToAction("Dashboard", "Home");
-        }
+        //    // Signin and goto dashboard
+        //    await _signInManager.SignInAsync(iuser, false);
+        //    return RedirectToAction("Dashboard", "Home");
+        //}
 
         [Authorize]
         public object Identity()
         {
+            string name = string.Empty;
+            var username = Request.Headers["X-MS-CLIENT-PRINCIPAL-NAME"][0];
+
+            if (username != null)
+            {
+                name = username;
+            }
+            else
+            {
+                name = this.User.Identity.Name;
+            }
+
             return new
             {
-                name = this.User.Identity.Name
+                name = name
             };
         }
     }

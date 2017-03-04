@@ -9,6 +9,9 @@
 connections.config
 apikey.json
 
+#Publishing info
+Names/Properties/*
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
