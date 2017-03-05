@@ -3,14 +3,17 @@ import { Subscription } from 'rxjs/subscription';
 
 import { IName } from './name.model';
 import { NameService } from './name.service';
+import { NameFilterService } from './name-filter.service';
+import { NameFilterComponent } from './name-filter.component';
 
 @Component({
   selector: 'name-list',
   template: require('./name-list.component.html'),
   styles: [require('./name-list.component.css')],
-  providers: [ NameService ]
+  providers: [NameService]
 })
 export class NameListComponent implements OnInit {
+  filteredNames: IName[];
   names: IName[];
   name: IName;
   nameblock: string;
@@ -18,15 +21,18 @@ export class NameListComponent implements OnInit {
   showAddForm: boolean = false;
   showAddFormQuick: boolean = true;
 
-  // Searching or Filtering name
-
-  constructor(private nameService: NameService) { }
+  constructor(private nameService: NameService, private filterService: NameFilterService) { }
 
   ngOnInit(): void { // from OnInit interface
     this.nameService.getNames()
-        .subscribe(names => this.names = names, // This is like a promise - triggered when service responds with result
+      .subscribe(
+      names => {
+        this.names = names;
+        this.filteredNames = names;
+      }, // This is like a promise - triggered when service responds with result
       error => this.error = <any>error);
 
+    this.filteredNames = this.names;
     this.clearAddForm();
   }
 
@@ -61,6 +67,10 @@ export class NameListComponent implements OnInit {
     );
   }
 
+  filterChanged(searchText: string) {
+    this.filteredNames = this.filterService.filter(searchText, ['name', 'tags', 'features'], this.names);
+  }
+
   private clearAddForm(): void {
     this.name = {
       id: 0,
@@ -69,5 +79,6 @@ export class NameListComponent implements OnInit {
       tags: [],
       features: []
     };
+    this.nameblock = "";
   }
 }

@@ -114,45 +114,43 @@ namespace Names.Controllers
         /// TODO
         /// </summary>
         /// <returns></returns>
-        //public async Task<IActionResult> Backdoor()
-        //{
-        //    var username = "johnjlee316@gmail.com";
-        //    IdentityUser iuser = await _userManager.FindByNameAsync(username);
+        public async Task<IActionResult> Backdoor()
+        {
+            var username = "johnjlee316@gmail.com";
+            IdentityUser iuser = await _userManager.FindByNameAsync(username);
 
-        //    // Check if new user registered  
-        //    if (iuser == null)
-        //    {
-        //        // Register New User
-        //        iuser = new IdentityUser(username);
-        //        iuser.Email = username;
+            // Check if new user registered  
+            if (iuser == null)
+            {
+                // Register New User
+                iuser = new IdentityUser(username);
+                iuser.Email = username;
 
-        //        var creation = await _userManager.CreateAsync(iuser, "NamesManager#2017"); // Dummy Pswd, never used
-        //        if (!creation.Succeeded)
-        //        {
-        //            throw new Exception("Unable to register new user. Please try back later.");
-        //        }
-        //    }
+                var creation = await _userManager.CreateAsync(iuser, "NamesManager#2017"); // Dummy Pswd, never used
+                if (!creation.Succeeded)
+                {
+                    throw new Exception("Unable to register new user. Please try back later.");
+                }
+            }
 
-        //    // Signin and goto dashboard
-        //    await _signInManager.SignInAsync(iuser, false);
-        //    return RedirectToAction("Dashboard", "Home");
-        //}
+            // Signin and goto dashboard
+            await _signInManager.SignInAsync(iuser, false);
+            return RedirectToAction("Dashboard", "Home");
+        }
 
         [Authorize]
         public object Identity()
         {
             string name = string.Empty;
-            var username = Request.Headers["X-MS-CLIENT-PRINCIPAL-NAME"][0];
-
-            if (username != null)
-            {
-                name = username;
-            }
-            else
+            if (!Request.Headers.ContainsKey("X-MS-CLIENT-PRINCIPAL-NAME"))
             {
                 name = this.User.Identity.Name;
             }
-
+            else
+            {
+                name = Request.Headers["X-MS-CLIENT-PRINCIPAL-NAME"][0];
+            }
+            
             return new
             {
                 name = name

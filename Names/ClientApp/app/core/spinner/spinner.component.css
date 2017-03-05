@@ -1,6 +1,15 @@
 ﻿.spinner {
   color: #7c7a7c;
   position: absolute;
-  left: 30%;top: 12%
+  right: 5%;
+  top: 10%;
 }
 
+@media (min-width: 768px) {
+  .spinner {
+    color: #7c7a7c;
+    position: absolute;
+    right: 5%;
+    top: 5%;
+  }
+}

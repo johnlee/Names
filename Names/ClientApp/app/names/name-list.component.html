@@ -6,10 +6,6 @@
     </button>
   </div>
 
-  <div id="searchFilter">
-
-  </div>
-
   <div class="card" *ngIf="showAddForm">
     <div class="card-block">
       <div class="form-group">
@@ -42,17 +38,11 @@
           <label for="addTags">Tags</label>
           <input id="addTags" type="text" class="form-control" [(ngModel)]="name.tags" />
           <small class="text-warning">Add multiple tags separated by comma. Example: <i>work, manager</i></small>
-          <p>
-            <small class="text-info">Popular Tags:</small>
-          </p>
         </div>
         <div class="form-group">
           <label for="addFeatures">Features</label>
           <input id="addFeatures" type="text" class="form-control" [(ngModel)]="name.features" />
           <small class="text-warning">Add multiple features separated by comma. Example: <i>skinny, asian, glasses</i></small>
-          <p>
-            <small class="text-info">Popular Features:</small>
-          </p>
         </div>
         <div class="form-group">
           <label for="uploadPhoto">Upload Photo</label>
@@ -68,8 +58,14 @@
     </div>
   </div>
 
+  <div class="card">
+    <div class="card-block">
+      <name-filter (changed)="filterChanged($event)"></name-filter>
+    </div>
+  </div>
+
   <div class="card" *ngIf='names && names.length'>
-    <div class="card-block" *ngFor="let name of names">
+    <div class="card-block" *ngFor="let name of filteredNames">
       <img class="card-image thumbnail pull-left" src="/dist/main/images/lego03.png" alt="Person Photo">
       <a href="" [routerLink]="['/Home', name.id]">
         <button class="btn btn-default pull-right">
@@ -89,8 +85,8 @@
         <span *ngFor="let feature of name.features">{{ feature }}, </span>
       </p>
       <div class="card-footer">
-        <small class="text-muted">Modified: 3 mins ago</small>
-        <small class="text-muted">Created:  3 mins ago</small>
+        <small class="text-muted"></small>
+        <small class="text-muted"></small>
       </div>
     </div>
   </div>

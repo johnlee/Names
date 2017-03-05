@@ -6,8 +6,9 @@ import { RouterModule } from '@angular/router';
 import { NameDetailComponent } from './name-detail.component';
 import { NameListComponent } from './name-list.component';
 import { NameService } from './name.service';
-import { NameFilter } from './name.filter';
 import { NameGuard } from './name.guard';
+import { NameFilterService } from './name-filter.service';
+import { NameFilterComponent } from './name-filter.component';
 
 @NgModule({
   imports: [ // import modules
@@ -28,10 +29,11 @@ import { NameGuard } from './name.guard';
   declarations: [ // components and filters
     NameListComponent,
     NameDetailComponent,
-    NameFilter
+    NameFilterComponent
   ],
   providers: [ // service providers
     NameService,
+    NameFilterService,
     NameGuard // Guard service
   ]
 })
