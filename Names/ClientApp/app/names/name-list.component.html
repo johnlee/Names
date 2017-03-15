@@ -24,7 +24,7 @@
           <small class="text-warning">
             Enter Name, Tags and Features on each line. Multiple tags and features separated by commas. Example:<br />
             <i>John Lee</i><br />
-            <i>work, manager</i><br />
+            <i>work, engineer</i><br />
             <i>skinny, asian, glasses</i><br />
           </small>
         </div>
@@ -37,7 +37,7 @@
         <div class="form-group">
           <label for="addTags">Tags</label>
           <input id="addTags" type="text" class="form-control" [(ngModel)]="name.tags" />
-          <small class="text-warning">Add multiple tags separated by comma. Example: <i>work, manager</i></small>
+          <small class="text-warning">Add multiple tags separated by comma. Example: <i>work, engineer</i></small>
         </div>
         <div class="form-group">
           <label for="addFeatures">Features</label>
@@ -71,6 +71,7 @@
         <button class="btn btn-default pull-right">
           Edit
         </button>
+
       </a>
       <h4 class="card-title">{{ name.name }}</h4>
 
@@ -85,7 +86,7 @@
         <span *ngFor="let feature of name.features">{{ feature }}, </span>
       </p>
       <div class="card-footer">
-        <small class="text-muted"></small>
+        <small class="text-muted"><a href="" title="This Feature not yet Available" (click)="clickConvertContact()">Convert To Contact</a></small>
         <small class="text-muted"></small>
       </div>
     </div>

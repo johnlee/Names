@@ -67,6 +67,11 @@ export class NameListComponent implements OnInit {
     );
   }
 
+  clickConvertContact() {
+    alert("Sorry this feature is not yet available");
+    return false;
+  }
+
   filterChanged(searchText: string) {
     this.filteredNames = this.filterService.filter(searchText, ['name', 'tags', 'features'], this.names);
   }
